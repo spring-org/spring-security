@@ -10,4 +10,9 @@ public class BasicController {
     public String index() {
         return "Hello World";
     }
+
+    @GetMapping("/loginPage")
+    public String loginPage() {
+        return "loginPage";
+    }
 }
