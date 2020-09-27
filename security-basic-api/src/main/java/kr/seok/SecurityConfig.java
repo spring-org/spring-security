@@ -21,9 +21,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         // 인가 정책
         http
                 .authorizeRequests()
-                .anyRequest().authenticated();
+                .anyRequest()
+                .authenticated()
         // 인증 정책
-        http
+            .and()
                 .formLogin()
 //                .loginPage("/loginPage")
 //                .defaultSuccessUrl("/")
@@ -76,7 +77,35 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 //                .alwaysRemember(true) // remember me  기능이 활성화되지 않아도 항상 실행
                 /* user 계정 확인 메서드 */
                 .userDetailsService(userDetailsService)
-                ;
+            .and()
+                .anonymous()
+//            .and()
+                /* 세션 관리 */
+//                .sessionManagement()
+//                .maximumSessions(1)
+//                .maxSessionsPreventsLogin(true)
+
+            /* 사용자의 쿠키를 공격자의 쿠키로 인증처리 한 뒤 공격자가 해당 쿠키로 인증하는 세션 고정 공격 */
+//            .and()
+                /* 세션 고정 보호*/
+//                .sessionFixation()
+                /* 세센 고정 보호를 사용하지 않는 경우 위와 같은 문제가 발생할 수 있음 */
+                // .none()
+                // .migrateSession()
+                // .newSession()
+                /* 인증 처리 시 기존 세션 내용을 새로운 인증 세션으로 변경하는 방법 */
+//                .changeSessionId()
+//            .and()
+//                .sessionManagement()
+                /* 스프링 시큐리티가 항상 세션을 생성하는 정책 */
+                // .sessionCreationPolicy(SessionCreationPolicy.ALWAYS)
+                /* 스프링 시큐리티가 생성하지 않지만 이미 존재하면 사용 */
+                // .sessionCreationPolicy(SessionCreationPolicy.NEVER)
+                /* 스프링 시큐리티가 생성하지 않고 존재해도 사용하지 않음 */
+                // .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                /* 스프링 시큐리티가 필요 시 생성(기본값) */
+//                .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
+            ;
     }
 }
 
