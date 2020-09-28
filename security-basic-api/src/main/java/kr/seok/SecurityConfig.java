@@ -79,11 +79,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .userDetailsService(userDetailsService)
             .and()
                 .anonymous()
-//            .and()
+            .and()
                 /* 세션 관리 */
-//                .sessionManagement()
-//                .maximumSessions(1)
-//                .maxSessionsPreventsLogin(true)
+                .sessionManagement()
+                .maximumSessions(1)
+                .maxSessionsPreventsLogin(true)
 //                .expiredUrl("/login")
                 /* 위 API 와 함께 사용할 수 없음 */
 //                .sessionManagement()
@@ -91,16 +91,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 
             /* 사용자의 쿠키를 공격자의 쿠키로 인증처리 한 뒤 공격자가 해당 쿠키로 인증하는 세션 고정 공격 */
-            .and()
+//            .and()
                 /* 세션 고정 보호*/
-                .sessionManagement()
-                .sessionFixation()
+//                .sessionManagement()
+//                .sessionFixation()
                 /* 세센 고정 보호를 사용하지 않는 경우 위와 같은 문제가 발생할 수 있음 */
 //                 .none()
 //                 .migrateSession()
 //                 .newSession()
                 /* 인증 처리 시 기존 세션 내용을 새로운 인증 세션으로 변경하는 방법 */
-                .changeSessionId()
+//                .changeSessionId()
 //            .and()
 //                .sessionManagement()
                 /* 스프링 시큐리티가 항상 세션을 생성하는 정책 */
