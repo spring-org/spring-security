@@ -15,4 +15,19 @@ public class BasicController {
     public String loginPage() {
         return "loginPage";
     }
+
+    @GetMapping("/user")
+    public String user() {
+        return "user";
+    }
+
+    @GetMapping("/admin/pay")
+    public String adminPay() {
+        return "admin";
+    }
+
+    @GetMapping("/admin/**")
+    public String adminAll() {
+        return "sys";
+    }
 }

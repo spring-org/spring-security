@@ -1,6 +1,7 @@
 package kr.seok;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -16,11 +17,25 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         this.userDetailsService = userDetailsService;
     }
 
+    /* 인가 API 설정 테스트를 위한 InMemory 계정 등록 */
+    @Override
+    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+        auth.inMemoryAuthentication().withUser("user").password("{noop}1234").roles("USER");
+        auth.inMemoryAuthentication().withUser("sys").password("{noop}1234").roles("SYS");
+        auth.inMemoryAuthentication().withUser("admin").password("{noop}1234").roles("ADMIN");
+    }
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         // 인가 정책
         http
+                /* 모든 경로에 대해서 권한 요청 설정 */
                 .authorizeRequests()
+                    /* /user 경로의 request가 들어오는 경우 인가 처리를 통해 USER role을 가진 사용자에 대해서 resource를 제공하겠다는 설정 */
+                    .antMatchers("/user").hasRole("USER")
+                    .antMatchers("/admin/pay").hasRole("ADMIN")
+                    .antMatchers("/admin/**").access("hasRole('ADMIN') or hasRole('SYS')")
+
                 .anyRequest()
                 .authenticated()
         // 인증 정책
@@ -70,13 +85,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 //                })
 //                /* 쿠키명 */
 //                .deleteCookies("remember-me")
-            .and()
-                .rememberMe()
+//            .and()
+//                .rememberMe()
 //                .rememberMeParameter("remember") // 기본 파라미터 명 -> "remember-me"
 //                .tokenValiditySeconds(3600) // 만료시간 default 14일
 //                .alwaysRemember(true) // remember me  기능이 활성화되지 않아도 항상 실행
-                /* user 계정 확인 메서드 */
-                .userDetailsService(userDetailsService)
+//                /* user 계정 확인 메서드 */
+//                .userDetailsService(userDetailsService)
             .and()
                 .anonymous()
             .and()
@@ -84,8 +99,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionManagement()
                 .maximumSessions(1)
                 .maxSessionsPreventsLogin(true)
+//                .maxSessionsPreventsLogin(false)
 //                .expiredUrl("/login")
-                /* 위 API 와 함께 사용할 수 없음 */
+//                /* 위 API 와 함께 사용할 수 없음 */
 //                .sessionManagement()
 //                .invalidSessionUrl("/login")
 
@@ -111,6 +127,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 // .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 /* 스프링 시큐리티가 필요 시 생성(기본값) */
 //                .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
+
             ;
     }
 }
