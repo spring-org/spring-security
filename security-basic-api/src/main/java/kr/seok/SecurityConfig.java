@@ -1,11 +1,25 @@
 package kr.seok;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.web.AuthenticationEntryPoint;
+import org.springframework.security.web.access.AccessDeniedHandler;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+import org.springframework.security.web.savedrequest.HttpSessionRequestCache;
+import org.springframework.security.web.savedrequest.RequestCache;
+import org.springframework.security.web.savedrequest.SavedRequest;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
@@ -31,15 +45,21 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 /* 모든 경로에 대해서 권한 요청 설정 */
                 .authorizeRequests()
+
+                    /* custom 한 /login resource 접근을 허용하도록 하기 위한 설정 */
+                    .antMatchers("/login").permitAll()
+
                     /* /user 경로의 request가 들어오는 경우 인가 처리를 통해 USER role을 가진 사용자에 대해서 resource를 제공하겠다는 설정 */
                     .antMatchers("/user").hasRole("USER")
                     .antMatchers("/admin/pay").hasRole("ADMIN")
                     .antMatchers("/admin/**").access("hasRole('ADMIN') or hasRole('SYS')")
 
+
                 .anyRequest()
                 .authenticated()
+                ;
         // 인증 정책
-            .and()
+        http
                 .formLogin()
 //                .loginPage("/loginPage")
 //                .defaultSuccessUrl("/")
@@ -62,7 +82,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 //                    }
 //                })
 //                .permitAll()
-//            .and()
+//                http
 //                .logout()
 //                /* GET, POST 가능 */
 //                .logoutUrl("/logout")
@@ -85,20 +105,39 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 //                })
 //                /* 쿠키명 */
 //                .deleteCookies("remember-me")
-//            .and()
+
+                /* 캐시 필터 구현 시 formLogin 에 추가되는 handler */
+                .successHandler(new AuthenticationSuccessHandler() {
+                    @Override
+                    public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
+                        RequestCache requestCache = new HttpSessionRequestCache();
+                        SavedRequest savedRequest = requestCache.getRequest(request, response);
+                        String redirectUrl = savedRequest.getRedirectUrl();
+                        response.sendRedirect(redirectUrl);
+                    }
+                })
+                ;
+
+
+//        http
 //                .rememberMe()
 //                .rememberMeParameter("remember") // 기본 파라미터 명 -> "remember-me"
 //                .tokenValiditySeconds(3600) // 만료시간 default 14일
 //                .alwaysRemember(true) // remember me  기능이 활성화되지 않아도 항상 실행
 //                /* user 계정 확인 메서드 */
 //                .userDetailsService(userDetailsService)
-            .and()
-                .anonymous()
-            .and()
-                /* 세션 관리 */
-                .sessionManagement()
-                .maximumSessions(1)
-                .maxSessionsPreventsLogin(true)
+//            ;
+
+            /* 익명 처리 */
+//        http
+//                .anonymous()
+//        ;
+
+//        /* 세션 관리*/
+//        http
+//                .sessionManagement()
+//                .maximumSessions(1)
+//                .maxSessionsPreventsLogin(true)
 //                .maxSessionsPreventsLogin(false)
 //                .expiredUrl("/login")
 //                /* 위 API 와 함께 사용할 수 없음 */
@@ -107,7 +146,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 
             /* 사용자의 쿠키를 공격자의 쿠키로 인증처리 한 뒤 공격자가 해당 쿠키로 인증하는 세션 고정 공격 */
-//            .and()
+//        http
                 /* 세션 고정 보호*/
 //                .sessionManagement()
 //                .sessionFixation()
@@ -128,7 +167,23 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 /* 스프링 시큐리티가 필요 시 생성(기본값) */
 //                .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
 
-            ;
+//            ;
+
+        http
+                .exceptionHandling()
+                .authenticationEntryPoint(new AuthenticationEntryPoint() {
+                    @Override
+                    public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException {
+                        response.sendRedirect("/login");
+                    }
+                })
+                .accessDeniedHandler(new AccessDeniedHandler() {
+                    @Override
+                    public void handle(HttpServletRequest request, HttpServletResponse response, AccessDeniedException accessDeniedException) throws IOException, ServletException {
+                        response.sendRedirect("/denied");
+                    }
+                })
+                ;
     }
 }
 

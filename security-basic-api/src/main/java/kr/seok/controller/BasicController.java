@@ -16,6 +16,16 @@ public class BasicController {
         return "loginPage";
     }
 
+    @GetMapping("/login")
+    public String login() {
+        return "login";
+    }
+
+    @GetMapping("/denied")
+    public String denied() {
+        return "denied";
+    }
+
     @GetMapping("/user")
     public String user() {
         return "user";
