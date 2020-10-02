@@ -1,25 +1,10 @@
 package kr.seok;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.AccessDeniedException;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.web.AuthenticationEntryPoint;
-import org.springframework.security.web.access.AccessDeniedHandler;
-import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
-import org.springframework.security.web.savedrequest.HttpSessionRequestCache;
-import org.springframework.security.web.savedrequest.RequestCache;
-import org.springframework.security.web.savedrequest.SavedRequest;
-
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
@@ -32,12 +17,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     /* 인가 API 설정 테스트를 위한 InMemory 계정 등록 */
-    @Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.inMemoryAuthentication().withUser("user").password("{noop}1234").roles("USER");
-        auth.inMemoryAuthentication().withUser("sys").password("{noop}1234").roles("SYS");
-        auth.inMemoryAuthentication().withUser("admin").password("{noop}1234").roles("ADMIN");
-    }
+//    @Override
+//    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+//        auth.inMemoryAuthentication().withUser("user").password("{noop}1234").roles("USER");
+//        auth.inMemoryAuthentication().withUser("sys").password("{noop}1234").roles("SYS");
+//        auth.inMemoryAuthentication().withUser("admin").password("{noop}1234").roles("ADMIN");
+//    }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -45,18 +30,18 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 /* 모든 경로에 대해서 권한 요청 설정 */
                 .authorizeRequests()
-
-                    /* custom 한 /login resource 접근을 허용하도록 하기 위한 설정 */
-                    .antMatchers("/login").permitAll()
-
-                    /* /user 경로의 request가 들어오는 경우 인가 처리를 통해 USER role을 가진 사용자에 대해서 resource를 제공하겠다는 설정 */
-                    .antMatchers("/user").hasRole("USER")
-                    .antMatchers("/admin/pay").hasRole("ADMIN")
-                    .antMatchers("/admin/**").access("hasRole('ADMIN') or hasRole('SYS')")
-
+//
+//                    /* custom 한 /login resource 접근을 허용하도록 하기 위한 설정 */
+//                    .antMatchers("/login").permitAll()
+//
+//                    /* /user 경로의 request가 들어오는 경우 인가 처리를 통해 USER role을 가진 사용자에 대해서 resource를 제공하겠다는 설정 */
+//                    .antMatchers("/user").hasRole("USER")
+//                    .antMatchers("/admin/pay").hasRole("ADMIN")
+//                    .antMatchers("/admin/**").access("hasRole('ADMIN') or hasRole('SYS')")
 
                 .anyRequest()
-                .authenticated()
+//                .authenticated()
+                .permitAll()
                 ;
         // 인증 정책
         http
@@ -106,16 +91,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 //                /* 쿠키명 */
 //                .deleteCookies("remember-me")
 
-                /* 캐시 필터 구현 시 formLogin 에 추가되는 handler */
-                .successHandler(new AuthenticationSuccessHandler() {
-                    @Override
-                    public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
-                        RequestCache requestCache = new HttpSessionRequestCache();
-                        SavedRequest savedRequest = requestCache.getRequest(request, response);
-                        String redirectUrl = savedRequest.getRedirectUrl();
-                        response.sendRedirect(redirectUrl);
-                    }
-                })
+//                /* 캐시 필터 구현 시 formLogin 에 추가되는 handler */
+//                .successHandler(new AuthenticationSuccessHandler() {
+//                    @Override
+//                    public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
+//                        RequestCache requestCache = new HttpSessionRequestCache();
+//                        SavedRequest savedRequest = requestCache.getRequest(request, response);
+//                        String redirectUrl = savedRequest.getRedirectUrl();
+//                        response.sendRedirect(redirectUrl);
+//                    }
+//                })
                 ;
 
 
@@ -169,21 +154,21 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 //            ;
 
-        http
-                .exceptionHandling()
-                .authenticationEntryPoint(new AuthenticationEntryPoint() {
-                    @Override
-                    public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException {
-                        response.sendRedirect("/login");
-                    }
-                })
-                .accessDeniedHandler(new AccessDeniedHandler() {
-                    @Override
-                    public void handle(HttpServletRequest request, HttpServletResponse response, AccessDeniedException accessDeniedException) throws IOException, ServletException {
-                        response.sendRedirect("/denied");
-                    }
-                })
-                ;
+//        http
+//                .exceptionHandling()
+//                .authenticationEntryPoint(new AuthenticationEntryPoint() {
+//                    @Override
+//                    public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException {
+//                        response.sendRedirect("/login");
+//                    }
+//                })
+//                .accessDeniedHandler(new AccessDeniedHandler() {
+//                    @Override
+//                    public void handle(HttpServletRequest request, HttpServletResponse response, AccessDeniedException accessDeniedException) throws IOException, ServletException {
+//                        response.sendRedirect("/denied");
+//                    }
+//                })
+//                ;
     }
 }
 
