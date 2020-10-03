@@ -1,11 +1,13 @@
 package kr.seok;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.annotation.Order;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
+@Order(0)
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
@@ -30,7 +32,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 /* 모든 경로에 대해서 권한 요청 설정 */
                 .authorizeRequests()
-//
+
 //                    /* custom 한 /login resource 접근을 허용하도록 하기 위한 설정 */
 //                    .antMatchers("/login").permitAll()
 //
@@ -40,9 +42,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 //                    .antMatchers("/admin/**").access("hasRole('ADMIN') or hasRole('SYS')")
 
                 .anyRequest()
-//                .authenticated()
-                .permitAll()
-                ;
+                .authenticated()
+//                .permitAll()
+
+            /* 3.1.1. 필터 초기화 및 다중 보안 설정 용 */
+//            .antMatcher("/admin/**")
+//            .authorizeRequests()
+//            .anyRequest().authenticated()
+//        .and()
+//            .httpBasic()
+            ;
         // 인증 정책
         http
                 .formLogin()
@@ -119,10 +128,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 //        ;
 
 //        /* 세션 관리*/
-//        http
-//                .sessionManagement()
-//                .maximumSessions(1)
-//                .maxSessionsPreventsLogin(true)
+        http
+                .sessionManagement()
+                .maximumSessions(1)
+                .maxSessionsPreventsLogin(true)
 //                .maxSessionsPreventsLogin(false)
 //                .expiredUrl("/login")
 //                /* 위 API 와 함께 사용할 수 없음 */
@@ -152,7 +161,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 /* 스프링 시큐리티가 필요 시 생성(기본값) */
 //                .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
 
-//            ;
+            ;
 
 //        http
 //                .exceptionHandling()
