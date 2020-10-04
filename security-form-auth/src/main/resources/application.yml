@@ -1,0 +1,43 @@
+#spring.datasource.url=jdbc:postgresql://localhost:5432/springboot
+#spring.datasource.username=postgres
+#spring.datasource.password=pass
+
+#spring.jpa.hibernate.ddl-auto=update
+#spring.jpa.database-platform=org.hibernate.dialect.PostgreSQLDialect
+#
+#spring.jpa.properties.hibernate.format_sql=true
+#spring.jpa.properties.hibernate.show_sql=true
+#spring.jpa.properties.hibernate.jdbc.lob.non_contextual_creation=true
+#
+#spring.thymeleaf.cache=false
+#
+#spring.devtools.livereload.enabled=true
+#spring.devtools.restart.enabled=true
+#
+#spring.main.allow-bean-definition-overriding=true
+
+#spring.profiles.active=pointcut
+
+spring:
+  main:
+    allow-bean-definition-overriding: true
+  devtools:
+    livereload:
+      enabled: true
+    restart:
+      enabled: true
+  # DB h2
+  datasource:
+    url: jdbc:h2:~/docker/h2/data/security-form
+  # DB Jpa 설정
+  jpa:
+    properties:
+      hibernate:
+        ddl-auto: update
+        format_sql: true
+        show_sql: true
+        jdbc:
+          lob:
+            non_contextual_creation: true
+  thymeleaf:
+    cache: false

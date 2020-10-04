@@ -1,4 +1,5 @@
 rootProject.name = 'security'
 include 'security-common'
 include 'security-basic-api'
+include 'security-form-auth'
 
