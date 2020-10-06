@@ -1,13 +1,13 @@
 package kr.seok;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.annotation.Order;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
-@Order(0)
+@Configuration
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
@@ -128,10 +128,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 //        ;
 
 //        /* 세션 관리*/
-        http
-                .sessionManagement()
-                .maximumSessions(1)
-                .maxSessionsPreventsLogin(true)
+//        http
+//                .sessionManagement()
+//                .maximumSessions(1)
+//                .maxSessionsPreventsLogin(true)
 //                .maxSessionsPreventsLogin(false)
 //                .expiredUrl("/login")
 //                /* 위 API 와 함께 사용할 수 없음 */
