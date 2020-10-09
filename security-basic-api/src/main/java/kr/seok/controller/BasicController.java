@@ -1,15 +1,42 @@
 package kr.seok.controller;
 
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.servlet.http.HttpSession;
 
 @RestController
 public class BasicController {
 
     @GetMapping("/")
-    public String index() {
+    public String index(HttpSession session) {
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        SecurityContext context = (SecurityContext) session.getAttribute(HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY);
+        Authentication sessionContext = context.getAuthentication();
+
         return "Hello World";
+    }
+
+    @GetMapping("/thread")
+    public String thread() {
+
+        new Thread(
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        /* ThreaLocal 모드에서는 인증 객체가 null, InheritableThreadLocal 모드의 경우 Thread간 인증 객체가 공유 가능 한 것을 확인 */
+                        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+                    }
+                }
+        ).start();
+        return "thread";
     }
 
     @PostMapping("/")
