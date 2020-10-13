@@ -9,4 +9,3 @@ public class FormAuthApplication {
         SpringApplication.run(FormAuthApplication.class, args);
     }
 }
- 
