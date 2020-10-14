@@ -4,8 +4,10 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpSession;
@@ -50,7 +52,15 @@ public class BasicController {
     }
 
     @GetMapping("/login")
-    public String login() {
+    public String login(
+            @RequestParam(value = "error", required = false) String error,
+            @RequestParam(value = "exception", required = false) String exception,
+            ModelMap model
+    ) {
+
+        model.put("error", error);
+        model.put("exception", exception);
+
         return "login";
     }
 
