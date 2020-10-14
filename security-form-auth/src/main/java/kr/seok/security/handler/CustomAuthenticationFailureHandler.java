@@ -29,7 +29,7 @@ public class CustomAuthenticationFailureHandler extends SimpleUrlAuthenticationF
             errorMsg = "Invalid Secret Key";
         }
 
-        setDefaultFailureUrl("/login?error=true&exception=" + exception.getMessage());
+        setDefaultFailureUrl("/login?error=true&exception=" + errorMsg);
 
         super.onAuthenticationFailure(request, response, exception);
     }
