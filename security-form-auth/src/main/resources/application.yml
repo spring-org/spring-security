@@ -33,7 +33,7 @@ spring:
   jpa:
     properties:
       hibernate:
-        ddl-auto: create
+        ddl-auto: update
         format_sql: true
         show_sql: true
         jdbc:

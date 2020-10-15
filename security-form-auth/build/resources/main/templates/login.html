@@ -5,38 +5,6 @@
 <!--<meta id="_csrf_header" name="_csrf_header" th:content="${_csrf.headerName}"/>-->
 
 <head th:replace="layout/header::userHead"></head>
-<script>
-    function formLogin(e) {
-
-        var username = $("input[name='username']").val().trim();
-        var password = $("input[name='password']").val().trim();
-        var data = {"username" : username, "password" : password};
-
-        // var csrfHeader = $('meta[name="_csrf_header"]').attr('content')
-        // var csrfToken = $('meta[name="_csrf"]').attr('content')
-
-        $.ajax({
-            type: "post",
-            url: "/api/login",
-            data: JSON.stringify(data),
-            dataType: "json",
-            beforeSend : function(xhr){
-                // xhr.setRequestHeader(csrfHeader, csrfToken);
-                xhr.setRequestHeader("X-Requested-With", "XMLHttpRequest");
-                xhr.setRequestHeader("Content-type","application/json");
-            },
-            success: function (data) {
-                console.log(data);
-                window.location = '/';
-
-            },
-            error : function(xhr, status, error) {
-                console.log(error);
-                window.location = '/login?error=true&exception=' + xhr.responseText;
-            }
-        });
-    }
-</script>
 <body>
 <div th:replace="layout/top::header"></div>
 <div class="container text-center">
@@ -56,7 +24,6 @@
                 <div class="form-group">
                     <input type="password" class="form-control" name="password" placeholder="비밀번호" required="required">
                 </div>
-<!--                <button type="button" onclick="formLogin()" id="formbtn" class="btn btn-lg btn-primary btn-block">Ajax 로그인</button>-->
                 <button type="submit" class="btn btn-lg btn-primary btn-block">로그인</button>
             </form>
         </div>
