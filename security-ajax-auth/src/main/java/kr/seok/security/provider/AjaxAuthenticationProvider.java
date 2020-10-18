@@ -31,7 +31,7 @@ public class AjaxAuthenticationProvider implements AuthenticationProvider {
             throw new BadCredentialsException("BadCredentialsException");
         }
 
-        return  new AjaxAuthenticationToken(accountContext.getAccount(), null, accountContext.getAuthorities());
+        return new AjaxAuthenticationToken(accountContext.getAccount(), null, accountContext.getAuthorities());
     }
 
     /* 파라미터가 토큰의 타입과 같은지 확인 */

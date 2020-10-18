@@ -3,4 +3,5 @@ include 'security-common'
 include 'security-basic-api'
 include 'security-form-auth'
 include 'security-ajax-auth'
+include 'security-delegate'
 
