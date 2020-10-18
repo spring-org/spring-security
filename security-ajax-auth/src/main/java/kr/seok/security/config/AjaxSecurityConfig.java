@@ -1,6 +1,8 @@
 package kr.seok.security.config;
 
 import kr.seok.security.filter.AjaxLoginProcessingFilter;
+import kr.seok.security.handler.AjaxAuthenticationFailureHandler;
+import kr.seok.security.handler.AjaxAuthenticationSuccessHandler;
 import kr.seok.security.provider.AjaxAuthenticationProvider;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -12,6 +14,8 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.AuthenticationFailureHandler;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
@@ -26,8 +30,12 @@ public class AjaxSecurityConfig extends WebSecurityConfigurerAdapter {
     /* Custom 으로 만들어진 Ajax 용 Filter 작성 */
     @Bean
     public AjaxLoginProcessingFilter ajaxLoginProcessingFilter() throws Exception {
+
         AjaxLoginProcessingFilter ajaxLoginProcessingFilter = new AjaxLoginProcessingFilter();
         ajaxLoginProcessingFilter.setAuthenticationManager(authenticationManagerBean());
+        ajaxLoginProcessingFilter.setAuthenticationFailureHandler(authenticationFailureHandler());
+        ajaxLoginProcessingFilter.setAuthenticationSuccessHandler(authenticationSuccessHandler());
+
         return ajaxLoginProcessingFilter;
     }
 
@@ -37,6 +45,15 @@ public class AjaxSecurityConfig extends WebSecurityConfigurerAdapter {
         return new AjaxAuthenticationProvider();
     }
 
+    @Bean
+    public AuthenticationSuccessHandler authenticationSuccessHandler() {
+        return new AjaxAuthenticationSuccessHandler();
+    }
+
+    @Bean
+    public AuthenticationFailureHandler authenticationFailureHandler() {
+        return new AjaxAuthenticationFailureHandler();
+    }
     /* AjaxAuthenticationFilter 를 FilterChain에 등록하기 위한 AuthenticationManager 정의 */
     @Override
     public AuthenticationManager authenticationManagerBean() throws Exception {
