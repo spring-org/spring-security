@@ -16,11 +16,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 .antMatcher("/admin/**")
                 .authorizeRequests()
-                .anyRequest().authenticated()
-                ;
+                .anyRequest().authenticated();
+
         http
-                .httpBasic()
-                ;
+                .httpBasic();
     }
 }
 
@@ -37,4 +36,3 @@ class FormSecurityConfig extends WebSecurityConfigurerAdapter {
                 ;
     }
 }
-
