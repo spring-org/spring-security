@@ -1,4 +1,4 @@
-package kr.seok.security.ajax.common;
+package kr.seok.security.common;
 
 import org.springframework.security.web.authentication.WebAuthenticationDetails;
 

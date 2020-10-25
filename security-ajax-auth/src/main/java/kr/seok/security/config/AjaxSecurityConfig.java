@@ -1,6 +1,6 @@
 package kr.seok.security.config;
 
-import kr.seok.security.ajax.common.AjaxLoginAuthenticationEntryPoint;
+import kr.seok.security.common.AjaxLoginAuthenticationEntryPoint;
 import kr.seok.security.ajax.handler.AjaxAccessDeniedHandler;
 import kr.seok.security.ajax.handler.AjaxAuthenticationFailureHandler;
 import kr.seok.security.ajax.handler.AjaxAuthenticationSuccessHandler;

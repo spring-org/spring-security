@@ -30,9 +30,7 @@ public class CustomUserDetailsService implements UserDetailsService {
         roles.add(new SimpleGrantedAuthority(account.getRole()));
 
         /* UserDetails 인터페이스의 구현체인 User 클래스 */
-        AccountContext accountContext = new AccountContext(account, roles);
-
-        return accountContext;
+        return new AccountContext(account, roles);
     }
 
 }

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import kr.seok.domain.AccountDto;
 import kr.seok.security.ajax.token.AjaxAuthenticationToken;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
@@ -28,7 +29,7 @@ public class AjaxLoginProcessingFilter extends AbstractAuthenticationProcessingF
     private ObjectMapper objectMapper = new ObjectMapper();
 
     public AjaxLoginProcessingFilter() {
-        super(new AntPathRequestMatcher("/api/login"));
+        super(new AntPathRequestMatcher("/api/login", HttpMethod.POST.name()));
     }
 
     @Override
