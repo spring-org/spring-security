@@ -1,15 +1,15 @@
-package kr.seok.security.filter;
+package kr.seok.security.ajax.filter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import kr.seok.domain.AccountDto;
-import kr.seok.security.token.AjaxAuthenticationToken;
+import kr.seok.security.ajax.token.AjaxAuthenticationToken;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.thymeleaf.util.StringUtils;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -22,6 +22,7 @@ import java.io.IOException;
  *  4. objectMapper.readValue(request.getReader(), AccountDto.class) json 방식의 요청을 객체로 추출
  *
  */
+@Slf4j
 public class AjaxLoginProcessingFilter extends AbstractAuthenticationProcessingFilter {
 
     private ObjectMapper objectMapper = new ObjectMapper();
@@ -31,10 +32,15 @@ public class AjaxLoginProcessingFilter extends AbstractAuthenticationProcessingF
     }
 
     @Override
-    public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException, IOException, ServletException {
+    public Authentication attemptAuthentication(
+            HttpServletRequest request, HttpServletResponse response
+    ) throws AuthenticationException, IOException {
+
+        log.info("attemptAuthentication: 시작");
         if(!isAjax(request)) {
             throw new IllegalStateException("Ajax 요청 방식이 아님");
         }
+
         /* json 타입의 데이터를 AccountDto 객체로 변롼 */
         AccountDto accountDto = objectMapper.readValue(request.getReader(), AccountDto.class);
         if(StringUtils.isEmpty(accountDto.getUsername()) || StringUtils.isEmpty(accountDto.getPassword())) {
@@ -43,11 +49,13 @@ public class AjaxLoginProcessingFilter extends AbstractAuthenticationProcessingF
 
         /* Ajax 방식으로 들어온 request의 인증 정보로 Token을 생성 */
         AjaxAuthenticationToken ajaxAuthenticationToken = new AjaxAuthenticationToken(accountDto.getUsername(), accountDto.getPassword());
+        log.info("attemptAuthentication: 인증 토큰 정상 생성");
         return getAuthenticationManager().authenticate(ajaxAuthenticationToken);
     }
 
     private boolean isAjax(HttpServletRequest request) {
         if("XMLHttpRequest".equals(request.getHeader("X-Requested-With"))) {
+            log.info("attemptAuthentication: Ajax 요청 방식 확인");
             return true;
         }
         return false;

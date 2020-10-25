@@ -1,6 +1,6 @@
 package kr.seok.security.config;
 
-import kr.seok.security.filter.AjaxLoginProcessingFilter;
+import kr.seok.security.ajax.filter.AjaxLoginProcessingFilter;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.web.HttpSecurityBuilder;
 import org.springframework.security.config.annotation.web.configurers.AbstractAuthenticationFilterConfigurer;

@@ -41,3 +41,8 @@ spring:
             non_contextual_creation: true
   thymeleaf:
     cache: false
+
+logging:
+  level:
+    springframework: debug
+

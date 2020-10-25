@@ -1,17 +1,17 @@
 package kr.seok.security.config;
 
-import kr.seok.security.common.AjaxLoginAuthenticationEntryPoint;
-import kr.seok.security.handler.AjaxAccessDeniedHandler;
-import kr.seok.security.handler.AjaxAuthenticationFailureHandler;
-import kr.seok.security.handler.AjaxAuthenticationSuccessHandler;
-import kr.seok.security.provider.AjaxAuthenticationProvider;
+import kr.seok.security.ajax.common.AjaxLoginAuthenticationEntryPoint;
+import kr.seok.security.ajax.handler.AjaxAccessDeniedHandler;
+import kr.seok.security.ajax.handler.AjaxAuthenticationFailureHandler;
+import kr.seok.security.ajax.handler.AjaxAuthenticationSuccessHandler;
+import kr.seok.security.ajax.provider.AjaxAuthenticationProvider;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.annotation.Order;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -20,7 +20,7 @@ import org.springframework.security.web.authentication.AuthenticationFailureHand
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 
 @Configuration
-@EnableWebSecurity
+@Order(0)
 public class AjaxSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Bean
@@ -73,7 +73,7 @@ public class AjaxSecurityConfig extends WebSecurityConfigurerAdapter {
 
     /* 인증 처리 Manager 등록 */
     @Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+    protected void configure(AuthenticationManagerBuilder auth) {
         auth.authenticationProvider(ajaxAuthenticationProvider());
     }
 
@@ -85,6 +85,9 @@ public class AjaxSecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 /* 비동기 통신으로 요청한 사용자의 접근을 허용 */
                 .antMatchers("/api/messages").hasRole("MANAGER")
+                .antMatchers("/api/login").permitAll()
+                /* 그 외 요청들에 대해서 인증 처리 필요 설정 */
+
                 .anyRequest().authenticated()
                 ;
                 /* Custom DSL 설정으로 인한 주석처리 */
@@ -98,9 +101,9 @@ public class AjaxSecurityConfig extends WebSecurityConfigurerAdapter {
                 /* 인증 처리가 되지 않은 사용자의 요청 정보를 임시 저장하는 기능 */
                 .authenticationEntryPoint(new AjaxLoginAuthenticationEntryPoint())
                 /* 인가가 승인되지 않은 사용자의 접근 거부 처리 */
-                .accessDeniedHandler(ajaxAccessDeniedHandler())
-        //http.csrf().disable()
-                ;
+                .accessDeniedHandler(ajaxAccessDeniedHandler());
+
+//        http.csrf().disable();
 
         customConfigureAjax(http);
     }

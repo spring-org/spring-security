@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 @Controller
 public class UserController {
-	
+
 	private final UserService userService;
 
 	private final PasswordEncoder passwordEncoder;
@@ -21,17 +21,14 @@ public class UserController {
 		this.userService = userService;
 		this.passwordEncoder = passwordEncoder;
 	}
-//
-//	@Autowired
-//	private RoleRepository roleRepository;
 
 	@GetMapping(value="/users")
-	public String createUser() throws Exception {
+	public String createUser() {
 		return "user/login/register";
 	}
 
 	@PostMapping(value="/users")
-	public String createUser(AccountDto accountDto) throws Exception {
+	public String createUser(AccountDto accountDto) {
 
 		ModelMapper modelMapper = new ModelMapper();
 		/* Dto to Entity */
@@ -44,16 +41,8 @@ public class UserController {
 	}
 
 	@GetMapping(value="/mypage")
-	public String myPage(
-//			@AuthenticationPrincipal Account account, Authentication authentication, Principal principal
-	) throws Exception {
+	public String myPage() {
 		return "user/mypage";
 	}
-
-//	@GetMapping("/order")
-//	public String order(){
-//		userService.order();
-//		return "user/mypage";
-//	}
 
 }

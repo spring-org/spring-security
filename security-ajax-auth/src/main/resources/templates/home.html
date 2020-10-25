@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layout/header::userHead"></head>
+<meta id="_csrf" name="_csrf" th:content="${_csrf.token}"/>
+<meta id="_csrf_header" name="_csrf_header" th:content="${_csrf.headerName}"/>
+<script>
+    function messages() {
+
+        var csrfHeader = $('meta[name="_csrf_header"]').attr('content')
+        var csrfToken = $('meta[name="_csrf"]').attr('content')
+
+        $.ajax({
+            type: "post",
+            url: "/api/messages",
+            beforeSend : function(xhr){
+                // csrf 설정 값 헤더에 설정
+                xhr.setRequestHeader(csrfHeader, csrfToken);
+                xhr.setRequestHeader("X-Requested-With", "XMLHttpRequest");
+                xhr.setRequestHeader("Content-type","application/json");
+            },
+            success : function(data) {
+                console.log(data);
+                window.location = "/messages";
+            },
+            error : function(xhr, status, error) {
+                console.log(xhr.responseJSON);
+                console.log(status);
+                console.log(error);
+                if(xhr.responseJSON.status == '401') {
+                    window.location = '/api/login?error=true&exception=' + xhr.responseJSON.message;
+                } else if(xhr.responseJSON.status == '403') {
+                    window.location = '/api/denied?exception=' + xhr.responseJSON.message;
+                }
+            }
+        });
+    }
+</script>
+<body>
+<div th:replace="layout/top::header"></div>
+<div class="container">
+    <div class="row align-items-start">
+        <nav class="col-md-2 d-none d-md-block bg-light sidebar">
+            <div class="sidebar-sticky">
+                <ul class="nav flex-column">
+                    <li class="nav-item">
+                        <div style="padding-top:10px;" class="nav flex-column nav-pills" aria-orientation="vertical">
+                            <a th:href="@{/}" style="margin:5px;" class="nav-link active">대시보드</a>
+                            <a th:href="@{/mypage}" style="margin:5px;" class="nav-link text-primary">마이페이지</a>
+                            <a href="#" onclick="messages()" style="margin:5px;" class="nav-link text-primary">메시지</a>
+                            <a th:href="@{/config}" style="margin:5px;" class="nav-link text-primary">환경설정</a>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+        <div style="padding-top:50px;"  class="col">
+            <div class="container text-center">
+                <h1 class="text-primary">DASHBOARD</h1>
+                <div class="security"></div>
+                <h1>Core Spring Security 에 오신 것을 환영합니다.</h1>
+            </div>
+        </div>
+    </div>
+</div>
+<div th:replace="layout/footer::footer"></div>
+</body>
+</html>
