@@ -43,12 +43,11 @@ public final class AjaxLoginConfigurer<H extends HttpSecurityBuilder<H>> extends
         if (sessionAuthenticationStrategy != null) {
             getAuthenticationFilter().setSessionAuthenticationStrategy(sessionAuthenticationStrategy);
         }
-        RememberMeServices rememberMeServices = http
-                .getSharedObject(RememberMeServices.class);
+        RememberMeServices rememberMeServices = http.getSharedObject(RememberMeServices.class);
         if (rememberMeServices != null) {
             getAuthenticationFilter().setRememberMeServices(rememberMeServices);
         }
-        http.setSharedObject(AjaxLoginProcessingFilter.class,getAuthenticationFilter());
+        http.setSharedObject(AjaxLoginProcessingFilter.class, getAuthenticationFilter());
         http.addFilterBefore(getAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
     }
 

@@ -87,9 +87,7 @@ public class AjaxSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/api/messages").hasRole("MANAGER")
                 .antMatchers("/api/login").permitAll()
                 /* 그 외 요청들에 대해서 인증 처리 필요 설정 */
-
-                .anyRequest().authenticated()
-                ;
+                .anyRequest().authenticated();
                 /* Custom DSL 설정으로 인한 주석처리 */
 //        http
                 /* 필터 추가 form 인증 필터 전에 수행 */
