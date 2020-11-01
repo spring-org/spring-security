@@ -69,7 +69,7 @@ public class BasicController {
         return "denied";
     }
 
-    @GetMapping("/user")
+    @GetMapping("/users")
     public String user() {
         return "user";
     }

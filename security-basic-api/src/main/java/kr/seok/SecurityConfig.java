@@ -32,6 +32,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 /* 모든 경로에 대해서 권한 요청 설정 */
                 .authorizeRequests()
+                .antMatchers("/users").hasRole("USER")
 
 //                    /* custom 한 /login resource 접근을 허용하도록 하기 위한 설정 */
 //                    .antMatchers("/login").permitAll()
