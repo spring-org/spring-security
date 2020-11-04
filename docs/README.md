@@ -56,6 +56,7 @@
     8) 로그인 Ajax 구현 & CSRF
 
 ## 5. 인가(Authorization) 프로세스 구현 - DB 연동
+[security-Authorization](/docs/lecture/5.authorization.md)
 
 ### Assert 비즈니스 로직에서 사용하지 않는 이유
 ### SessionManagementFilter

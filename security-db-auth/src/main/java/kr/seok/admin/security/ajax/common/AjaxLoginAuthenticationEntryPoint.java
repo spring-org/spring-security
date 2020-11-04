@@ -1,4 +1,4 @@
-package kr.seok.security.common;
+package kr.seok.admin.security.ajax.common;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.security.core.AuthenticationException;

@@ -1,10 +1,10 @@
-package kr.seok.security.config;
+package kr.seok.admin.security.config;
 
-import kr.seok.security.ajax.common.AjaxLoginAuthenticationEntryPoint;
-import kr.seok.security.ajax.handler.AjaxAccessDeniedHandler;
-import kr.seok.security.ajax.handler.AjaxAuthenticationFailureHandler;
-import kr.seok.security.ajax.handler.AjaxAuthenticationSuccessHandler;
-import kr.seok.security.ajax.provider.AjaxAuthenticationProvider;
+import kr.seok.admin.security.ajax.common.AjaxLoginAuthenticationEntryPoint;
+import kr.seok.admin.security.ajax.handler.AjaxAccessDeniedHandler;
+import kr.seok.admin.security.ajax.handler.AjaxAuthenticationFailureHandler;
+import kr.seok.admin.security.ajax.handler.AjaxAuthenticationSuccessHandler;
+import kr.seok.admin.security.ajax.provider.AjaxAuthenticationProvider;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
@@ -13,8 +13,6 @@ import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.crypto.factory.PasswordEncoderFactories;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
@@ -22,24 +20,6 @@ import org.springframework.security.web.authentication.AuthenticationSuccessHand
 @Configuration
 @Order(0)
 public class AjaxSecurityConfig extends WebSecurityConfigurerAdapter {
-
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return PasswordEncoderFactories.createDelegatingPasswordEncoder();
-    }
-
-    /* Custom DSL 설정으로 인한 주석처리 */
-    /* Custom 으로 만들어진 Ajax 용 Filter 작성 */
-//    @Bean
-//    public AjaxLoginProcessingFilter ajaxLoginProcessingFilter() throws Exception {
-//
-//        AjaxLoginProcessingFilter ajaxLoginProcessingFilter = new AjaxLoginProcessingFilter();
-//        ajaxLoginProcessingFilter.setAuthenticationManager(authenticationManagerBean());
-//        ajaxLoginProcessingFilter.setAuthenticationFailureHandler(ajaxAuthenticationFailureHandler());
-//        ajaxLoginProcessingFilter.setAuthenticationSuccessHandler(ajaxAuthenticationSuccessHandler());
-//
-//        return ajaxLoginProcessingFilter;
-//    }
 
     /* 인증 처리를 수행하는 Provider */
     @Bean
@@ -89,11 +69,6 @@ public class AjaxSecurityConfig extends WebSecurityConfigurerAdapter {
                 /* 그 외 요청들에 대해서 인증 처리 필요 설정 */
                 .anyRequest().authenticated();
                 /* Custom DSL 설정으로 인한 주석처리 */
-//        http
-                /* 필터 추가 form 인증 필터 전에 수행 */
-//                .addFilterBefore(
-//                        ajaxLoginProcessingFilter(), UsernamePasswordAuthenticationFilter.class
-//                );
                 /* 예외 처리 */
         http    .exceptionHandling()
                 /* 인증 처리가 되지 않은 사용자의 요청 정보를 임시 저장하는 기능 */

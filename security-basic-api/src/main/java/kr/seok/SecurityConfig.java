@@ -43,8 +43,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 //                    .antMatchers("/admin/**").access("hasRole('ADMIN') or hasRole('SYS')")
 
                 .anyRequest()
-                .authenticated()
-//                .permitAll()
+//                .authenticated()
+                .permitAll()
 
             /* 3.1.1. 필터 초기화 및 다중 보안 설정 용 */
 //            .antMatcher("/admin/**")
@@ -162,7 +162,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 /* 스프링 시큐리티가 필요 시 생성(기본값) */
 //                .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
 
-            ;
+//            ;
 
 //        http
 //                .exceptionHandling()

@@ -1,7 +1,7 @@
-package kr.seok.security.provider;
+package kr.seok.admin.security.form.provider;
 
-import kr.seok.security.ajax.common.FormWebAuthenticationDetails;
-import kr.seok.security.service.AccountContext;
+import kr.seok.admin.security.form.common.FormWebAuthenticationDetails;
+import kr.seok.admin.security.service.AccountContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.BadCredentialsException;
