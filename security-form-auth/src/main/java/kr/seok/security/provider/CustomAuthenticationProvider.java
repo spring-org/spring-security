@@ -1,6 +1,6 @@
 package kr.seok.security.provider;
 
-import kr.seok.security.ajax.common.FormWebAuthenticationDetails;
+import kr.seok.security.common.FormWebAuthenticationDetails;
 import kr.seok.security.service.AccountContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationProvider;

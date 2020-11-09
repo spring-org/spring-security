@@ -21,15 +21,11 @@ import java.security.Principal;
 @Controller
 public class LoginController {
     /* Ajax 로그인 요청 방식은 POST로 받아야 함*/
-    @RequestMapping(value = {"/login", "/api/login"})
-    public String login(
-            @RequestParam(value = "error", required = false) String error,
-            @RequestParam(value = "exception", required = false) String exception
-            , Model model) {
-        log.info("error : {}", error);
-        log.info("exception : {}", exception);
-        model.addAttribute("error", error);
-        model.addAttribute("exception", exception);
+    @RequestMapping(value="/login")
+    public String login(@RequestParam(value = "error", required = false) String error,
+                        @RequestParam(value = "exception", required = false) String exception, Model model){
+        model.addAttribute("error",error);
+        model.addAttribute("exception",exception);
         return "login";
     }
 
@@ -44,7 +40,7 @@ public class LoginController {
         return "redirect:/login";
     }
 
-    @GetMapping(value = {"/denied", "/api/denied"})
+    @GetMapping(value="/denied")
     public String accessDenied(
             @RequestParam(value = "exception", required = false) String exception,
             Principal principal,

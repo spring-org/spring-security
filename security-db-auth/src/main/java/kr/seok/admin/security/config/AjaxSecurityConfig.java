@@ -92,6 +92,7 @@ public class AjaxSecurityConfig extends WebSecurityConfigurerAdapter {
                 /* AuthenticationManager */
                 .setAuthenticationManager(authenticationManagerBean())
                 /* 로그인 처리 URL */
+                .loginPage("/api/login")
                 .loginProcessingUrl("/api/login")
                 ;
     }

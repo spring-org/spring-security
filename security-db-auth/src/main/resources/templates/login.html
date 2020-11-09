@@ -15,6 +15,7 @@
         // var csrfHeader = $('meta[name="_csrf_header"]').attr('content')
         // var csrfToken = $('meta[name="_csrf"]').attr('content')
 
+        console.log(data);
         $.ajax({
             type: "post",
             url: "/api/login",
@@ -26,12 +27,12 @@
                 xhr.setRequestHeader("Content-type","application/json");
             },
             success: function (data) {
-                console.log(data);
+                console.log("SUCCESS: " + data);
                 window.location = '/';
 
             },
             error : function(xhr, status, error) {
-                console.log(error);
+                console.log("ERROR: " + error);
                 window.location = '/login?error=true&exception=' + xhr.responseText;
             }
         });
@@ -56,8 +57,8 @@
                 <div class="form-group">
                     <input type="password" class="form-control" name="password" placeholder="비밀번호" required="required">
                 </div>
-                <button type="button" onclick="formLogin()" id="formbtn" class="btn btn-lg btn-primary btn-block">Ajax 로그인</button>
-<!--                <button type="submit" class="btn btn-lg btn-primary btn-block">로그인</button>-->
+<!--                <button type="button" onclick="formLogin()" id="formbtn" class="btn btn-lg btn-primary btn-block">Ajax 로그인</button>-->
+                <button type="submit" class="btn btn-lg btn-primary btn-block">로그인</button>
             </form>
         </div>
     </div>

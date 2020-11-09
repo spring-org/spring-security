@@ -1,0 +1,38 @@
+spring.profiles: db
+spring:
+  profiles:
+    include: db_mysql
+---
+spring.profiles: db_mysql
+spring:
+  jpa:
+    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
+    generate-ddl: true
+    properties:
+      hibernate:
+        show_sql: true
+        format_sql: true
+        ddl-auto: update # 어플리케이션이 구동되고 Session이 시작될때 drop -> create 이 실행
+  datasource:
+    url: jdbc:mysql://localhost:3307/user_db
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: seok
+    password: 1234
+
+---
+spring.profiles: db_h2
+
+spring:
+  # DB h2
+  datasource:
+    url: jdbc:h2:~/docker/h2/data/security-form
+  # DB Jpa 설정
+  jpa:
+    properties:
+      hibernate:
+        ddl-auto: update
+        format_sql: true
+        show_sql: true
+        jdbc:
+          lob:
+            non_contextual_creation: true

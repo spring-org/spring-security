@@ -1,0 +1,18 @@
+spring:
+  main:
+    allow-bean-definition-overriding: true
+    devtools:
+      livereload:
+        enabled: true
+      restart:
+        enabled: true
+  profiles:
+    include: db
+
+logging:
+  level:
+    root: info
+    org:
+      # SpringFramework Logging
+      springframework: debug
+

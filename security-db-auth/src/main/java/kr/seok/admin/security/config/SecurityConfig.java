@@ -56,6 +56,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return customAccessDeniedHandler;
     }
 
+    private String[] permitAllResources = {"/", "/users", "/login", "/user/login/**", "/h2-console"};
+
     /* static resource security 에서 제외 처리 */
     @Override
     public void configure(WebSecurity web) {
@@ -67,7 +69,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         /* Authentication API*/
         http
                 .authorizeRequests()
-                .antMatchers("/", "/users", "user/login/**", "/login*").permitAll()
+                .antMatchers(permitAllResources).permitAll()
                 .anyRequest().authenticated()
                 ;
         /* FormLogin API */
@@ -76,8 +78,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .loginPage("/login")
                 /* form 태그의 action url */
                 .loginProcessingUrl("/login_proc")
-                /* 로그인 성공 후 redirect page */
-                .defaultSuccessUrl("/")
+//                /* 로그인 성공 후 redirect page */
+//                .defaultSuccessUrl("/")
                 /* request의 상세 값을 Details로 추가 하기 위한 작업 */
                 .authenticationDetailsSource(authenticationDetailsSource)
                 /* 사용자 정의 Success Handler */
@@ -88,6 +90,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 .exceptionHandling()
                 .accessDeniedHandler(accessDeniedHandler());
+        http.csrf().disable();
     }
 
     @Override
