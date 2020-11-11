@@ -2,6 +2,7 @@ spring.profiles: db
 spring:
   profiles:
     include: db_mysql
+
 ---
 spring.profiles: db_mysql
 spring:
@@ -12,7 +13,7 @@ spring:
       hibernate:
         show_sql: true
         format_sql: true
-        ddl-auto: update # 어플리케이션이 구동되고 Session이 시작될때 drop -> create 이 실행
+        ddl-auto: create # 어플리케이션이 구동되고 Session이 시작될때 drop -> create 이 실행
   datasource:
     url: jdbc:mysql://localhost:3307/user_db
     driver-class-name: com.mysql.cj.jdbc.Driver
