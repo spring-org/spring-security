@@ -6,6 +6,9 @@ spring:
         enabled: true
       restart:
         enabled: true
+  thymeleaf:
+    cache: false
+
   profiles:
     # db 설정 파일, local (logback 설정 파일)
     include: db, local
