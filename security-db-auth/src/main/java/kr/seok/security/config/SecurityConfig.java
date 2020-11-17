@@ -1,9 +1,11 @@
 package kr.seok.security.config;
 
+import kr.seok.security.factory.UrlResourcesMapFactoryBean;
 import kr.seok.security.form.common.FormAuthenticationDetailsSource;
 import kr.seok.security.form.handler.FormAccessDeniedHandler;
 import kr.seok.security.form.provider.FormAuthenticationProvider;
 import kr.seok.security.metadatasource.UrlFilterInvocationSecurityMetadataSource;
+import kr.seok.security.service.SecurityResourceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
@@ -46,6 +48,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Qualifier("formAuthenticationFailureHandler")
     @Autowired
     private AuthenticationFailureHandler formAuthenticationFailureHandler;
+
+    @Autowired
+    private SecurityResourceService securityResourceService;
 
     @Bean
     public AuthenticationProvider authenticationProvider() {
@@ -107,16 +112,25 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authenticationProvider(authenticationProvider());
     }
 
+    /* Custom FilterSecurityInterceptor 를 Filter에 추가하기 위한 Bean */
     @Override
     public AuthenticationManager authenticationManagerBean() throws Exception {
         return super.authenticationManagerBean();
     }
 
+    /* DB 기반으로 URL Resource, 권한을 관리하기 위한 FilterInvocationSecurityMetadataSource 구현체 */
     @Bean
-    public FilterInvocationSecurityMetadataSource urlFilterInvocationSecurityMetadataSource() {
-        return new UrlFilterInvocationSecurityMetadataSource();
+    public FilterInvocationSecurityMetadataSource urlFilterInvocationSecurityMetadataSource() throws Exception {
+        return new UrlFilterInvocationSecurityMetadataSource(urlResourcesMapFactoryBean().getObject());
     }
 
+    private UrlResourcesMapFactoryBean urlResourcesMapFactoryBean() {
+        UrlResourcesMapFactoryBean urlResourcesMapFactoryBean = new UrlResourcesMapFactoryBean();
+        urlResourcesMapFactoryBean.setSecurityResourceService(securityResourceService);
+        return urlResourcesMapFactoryBean;
+    }
+
+    /* 인가 처리를 하기 위한 사용자 정의 FilterSecurityInterceptor 구현체 */
     @Bean
     public FilterSecurityInterceptor customFilterSecurityInterceptor() throws Exception {
         FilterSecurityInterceptor filterSecurityInterceptor = new FilterSecurityInterceptor();
@@ -126,6 +140,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return filterSecurityInterceptor;
     }
 
+    /* 인가 하나의 투표 이상을 선택시 승인하는 방식의 클래스 */
     private AccessDecisionManager affirmativeBased() {
         return new AffirmativeBased(getAccessDecisionVoters());
     }

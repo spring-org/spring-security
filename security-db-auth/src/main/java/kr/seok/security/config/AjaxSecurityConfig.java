@@ -64,11 +64,12 @@ public class AjaxSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatcher("/api/**")
                 .authorizeRequests()
                 /* 비동기 통신으로 요청한 사용자의 접근을 허용 */
-                .antMatchers("/api/messages").hasRole("MANAGER")
+                .antMatchers("/api/messages").hasRole("USER")
                 .antMatchers("/api/login").permitAll()
                 /* 그 외 요청들에 대해서 인증 처리 필요 설정 */
                 .anyRequest().authenticated();
                 /* 예외 처리 */
+
         http    .exceptionHandling()
                 /* 인증 처리가 되지 않은 사용자의 요청 정보를 임시 저장하는 기능 */
                 .authenticationEntryPoint(new AjaxLoginAuthenticationEntryPoint())

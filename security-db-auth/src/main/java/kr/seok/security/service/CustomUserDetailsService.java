@@ -30,6 +30,7 @@ public class CustomUserDetailsService implements UserDetailsService {
             }
         }
 
+        assert account != null;
         Set<String> userRoles = account.getUserRoles()
                 .stream()
                 .map(Role::getRoleName)

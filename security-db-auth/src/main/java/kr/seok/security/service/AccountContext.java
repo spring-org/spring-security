@@ -5,15 +5,15 @@ import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 
-import java.util.Collection;
+import java.util.List;
 
 public class AccountContext extends User {
 
     @Getter
-    private final Account account;
+    private Account account;
 
-    public AccountContext(Account account, Collection<? extends GrantedAuthority> authorities) {
-        super(account.getUsername(), account.getPassword(), authorities);
+    public AccountContext(Account account, List<GrantedAuthority> roles) {
+        super(account.getUsername(), account.getPassword(), roles);
         this.account = account;
     }
 

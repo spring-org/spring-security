@@ -1,7 +1,9 @@
 package kr.seok.security.init;
 
 import kr.seok.domain.entity.Account;
+import kr.seok.domain.entity.Resources;
 import kr.seok.domain.entity.Role;
+import kr.seok.domain.repository.ResourcesRepository;
 import kr.seok.domain.repository.RoleRepository;
 import kr.seok.domain.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,10 +27,10 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
 
     @Autowired
     private RoleRepository roleRepository;
-//
-//    @Autowired
-//    private ResourcesRepository resourcesRepository;
-//
+
+    @Autowired
+    private ResourcesRepository resourcesRepository;
+
 //    @Autowired
 //    private RoleHierarchyRepository roleHierarchyRepository;
 
@@ -55,15 +57,64 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
         alreadySetup = true;
     }
 
-    private void setupSecurityResources() {
+    private Set<Role> getUserRoles() {
+        Role userRole = createRoleIfNotFound("ROLE_USER", "사용자권한");
         Set<Role> roles = new HashSet<>();
+        roles.add(userRole);
+        return roles;
+    }
+
+    private Set<Role> getManagerRoles() {
         Role adminRole = createRoleIfNotFound("ROLE_ADMIN", "관리자");
+        Role managerRole = createRoleIfNotFound("ROLE_MANAGER", "매니저권한");
+        Set<Role> roles = new HashSet<>();
         roles.add(adminRole);
-//        createResourceIfNotFound("/admin/**", "", roles, "url");
-//        createResourceIfNotFound("execution(public * io.security.corespringsecurity.aopsecurity.*Service.pointcut*(..))", "", roles, "pointcut");
-        createUserIfNotFound("admin", "admin@admin.com", "pass", roles);
+        roles.add(managerRole);
+        return roles;
+    }
+
+    private Set<Role> getAdminRoles() {
+        Role adminRole = createRoleIfNotFound("ROLE_ADMIN", "관리자");
         Role managerRole = createRoleIfNotFound("ROLE_MANAGER", "매니저권한");
         Role userRole = createRoleIfNotFound("ROLE_USER", "사용자권한");
+        Set<Role> roles = new HashSet<>();
+        roles.add(adminRole);
+        roles.add(managerRole);
+        roles.add(userRole);
+        return roles;
+    }
+
+    private void setupSecurityResources() {
+        Set<Role> roles;
+        Role adminRole = createRoleIfNotFound("ROLE_ADMIN", "관리자");
+        Role managerRole = createRoleIfNotFound("ROLE_MANAGER", "매니저권한");
+        Role userRole = createRoleIfNotFound("ROLE_USER", "사용자권한");
+
+
+        createUserIfNotFound("admin", "admin@admin.com", "pass", getAdminRoles());
+        createUserIfNotFound("manager", "manager@gmail.com", "1234", getManagerRoles());
+        createUserIfNotFound("user", "user@gmail.com", "1234", getUserRoles());
+
+        roles = new HashSet<>();
+        roles.add(adminRole);
+        createResourceIfNotFound("/admin/**", "", roles, "url");
+
+        roles = new HashSet<>();
+        roles.add(adminRole);
+        roles.add(managerRole);
+        createResourceIfNotFound("/messages", "", getAdminRoles(), "url");
+
+        roles = new HashSet<>();
+        roles.add(adminRole);
+        roles.add(managerRole);
+        roles.add(userRole);
+        createResourceIfNotFound("/mypage", "", getAdminRoles(), "url");
+
+        roles = new HashSet<>();
+        roles.add(adminRole);
+        createResourceIfNotFound("/config", "", roles, "url");
+
+//        createResourceIfNotFound("execution(public * io.security.corespringsecurity.aopsecurity.*Service.pointcut*(..))", "", roles, "pointcut");
 //        createRoleHierarchyIfNotFound(managerRole, adminRole);
 //        createRoleHierarchyIfNotFound(userRole, managerRole);
     }
@@ -98,21 +149,21 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
         return userRepository.save(account);
     }
 
-//    @Transactional
-//    public Resources createResourceIfNotFound(String resourceName, String httpMethod, Set<Role> roleSet, String resourceType) {
-//        Resources resources = resourcesRepository.findByResourceNameAndHttpMethod(resourceName, httpMethod);
-//
-//        if (resources == null) {
-//            resources = Resources.builder()
-//                    .resourceName(resourceName)
-//                    .roleSet(roleSet)
-//                    .httpMethod(httpMethod)
-//                    .resourceType(resourceType)
-//                    .orderNum(count.incrementAndGet())
-//                    .build();
-//        }
-//        return resourcesRepository.save(resources);
-//    }
+    @Transactional
+    public Resources createResourceIfNotFound(String resourceName, String httpMethod, Set<Role> roleSet, String resourceType) {
+        Resources resources = resourcesRepository.findByResourceNameAndHttpMethod(resourceName, httpMethod);
+
+        if (resources == null) {
+            resources = Resources.builder()
+                    .resourceName(resourceName)
+                    .roleSet(roleSet)
+                    .httpMethod(httpMethod)
+                    .resourceType(resourceType)
+                    .orderNum(count.incrementAndGet())
+                    .build();
+        }
+        return resourcesRepository.save(resources);
+    }
 
 //    @Transactional
 //    public void createRoleHierarchyIfNotFound(Role childRole, Role parentRole) {

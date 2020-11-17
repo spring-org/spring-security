@@ -27,7 +27,7 @@ public class FormAuthenticationProvider implements AuthenticationProvider {
         AccountContext accountContext = (AccountContext) userDetailsService.loadUserByUsername(username);
 
         /* 패스워드 검증 */
-        if(!passwordEncoder.matches(password, accountContext.getAccount().getPassword())) {
+        if(!passwordEncoder.matches(password, accountContext.getPassword())) {
             throw new BadCredentialsException("BadCredentialsException");
         }
         return new UsernamePasswordAuthenticationToken(accountContext.getAccount(), null, accountContext.getAuthorities());
