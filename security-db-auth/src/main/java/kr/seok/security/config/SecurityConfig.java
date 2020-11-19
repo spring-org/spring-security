@@ -1,6 +1,7 @@
 package kr.seok.security.config;
 
 import kr.seok.security.factory.UrlResourcesMapFactoryBean;
+import kr.seok.security.filter.PermitAllFilter;
 import kr.seok.security.form.common.FormAuthenticationDetailsSource;
 import kr.seok.security.form.handler.FormAccessDeniedHandler;
 import kr.seok.security.form.provider.FormAuthenticationProvider;
@@ -51,6 +52,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private SecurityResourceService securityResourceService;
 
+    private String[] permitAllResources = {"/", "/login", "/user/login/**"};
+
     @Bean
     public AuthenticationProvider authenticationProvider() {
         return new FormAuthenticationProvider();
@@ -72,7 +75,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
-                .antMatchers("/**").permitAll()
                 .anyRequest().authenticated();
 
         http
@@ -90,7 +92,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
         /* FilterSecurityInterceptor 사용자 정의 */
         http
-                .addFilterBefore(customFilterSecurityInterceptor(), FilterSecurityInterceptor.class);
+                .addFilterBefore(permitAllFilter(), FilterSecurityInterceptor.class);
 
         http.csrf().disable();
     }
@@ -131,12 +133,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     /* 인가 처리를 하기 위한 사용자 정의 FilterSecurityInterceptor 구현체 */
     @Bean
-    public FilterSecurityInterceptor customFilterSecurityInterceptor() throws Exception {
-        FilterSecurityInterceptor filterSecurityInterceptor = new FilterSecurityInterceptor();
-        filterSecurityInterceptor.setSecurityMetadataSource(urlFilterInvocationSecurityMetadataSource());
-        filterSecurityInterceptor.setAccessDecisionManager(affirmativeBased());
-        filterSecurityInterceptor.setAuthenticationManager(authenticationManagerBean());
-        return filterSecurityInterceptor;
+    public PermitAllFilter permitAllFilter() throws Exception {
+        /* 인가 처리 필터를 PermitAllFilter로 변경 */
+        PermitAllFilter permitAllFilter = new PermitAllFilter(permitAllResources);
+        permitAllFilter.setSecurityMetadataSource(urlFilterInvocationSecurityMetadataSource());
+        permitAllFilter.setAccessDecisionManager(affirmativeBased());
+        permitAllFilter.setAuthenticationManager(authenticationManagerBean());
+        return permitAllFilter;
     }
 
     /* 인가 하나의 투표 이상을 선택시 승인하는 방식의 클래스 */
