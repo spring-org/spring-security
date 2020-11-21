@@ -3,7 +3,9 @@ package kr.seok.security.init;
 import kr.seok.domain.entity.Account;
 import kr.seok.domain.entity.Resources;
 import kr.seok.domain.entity.Role;
+import kr.seok.domain.entity.RoleHierarchy;
 import kr.seok.domain.repository.ResourcesRepository;
+import kr.seok.domain.repository.RoleHierarchyRepository;
 import kr.seok.domain.repository.RoleRepository;
 import kr.seok.domain.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,8 +33,8 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
     @Autowired
     private ResourcesRepository resourcesRepository;
 
-//    @Autowired
-//    private RoleHierarchyRepository roleHierarchyRepository;
+    @Autowired
+    private RoleHierarchyRepository roleHierarchyRepository;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -100,13 +102,10 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
         createResourceIfNotFound("/admin/**", "", roles, "url");
 
         roles = new HashSet<>();
-        roles.add(adminRole);
         roles.add(managerRole);
         createResourceIfNotFound("/messages", "", getAdminRoles(), "url");
 
         roles = new HashSet<>();
-        roles.add(adminRole);
-        roles.add(managerRole);
         roles.add(userRole);
         createResourceIfNotFound("/mypage", "", getAdminRoles(), "url");
 
@@ -115,8 +114,8 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
         createResourceIfNotFound("/config", "", roles, "url");
 
 //        createResourceIfNotFound("execution(public * io.security.corespringsecurity.aopsecurity.*Service.pointcut*(..))", "", roles, "pointcut");
-//        createRoleHierarchyIfNotFound(managerRole, adminRole);
-//        createRoleHierarchyIfNotFound(userRole, managerRole);
+        createRoleHierarchyIfNotFound(managerRole, adminRole);
+        createRoleHierarchyIfNotFound(userRole, managerRole);
     }
 
     @Transactional
@@ -165,27 +164,27 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
         return resourcesRepository.save(resources);
     }
 
-//    @Transactional
-//    public void createRoleHierarchyIfNotFound(Role childRole, Role parentRole) {
-//
-//        RoleHierarchy roleHierarchy = roleHierarchyRepository.findByChildName(parentRole.getRoleName());
-//        if (roleHierarchy == null) {
-//            roleHierarchy = RoleHierarchy.builder()
-//                    .childName(parentRole.getRoleName())
-//                    .build();
-//        }
-//        RoleHierarchy parentRoleHierarchy = roleHierarchyRepository.save(roleHierarchy);
-//
-//        roleHierarchy = roleHierarchyRepository.findByChildName(childRole.getRoleName());
-//        if (roleHierarchy == null) {
-//            roleHierarchy = RoleHierarchy.builder()
-//                    .childName(childRole.getRoleName())
-//                    .build();
-//        }
-//
-//        RoleHierarchy childRoleHierarchy = roleHierarchyRepository.save(roleHierarchy);
-//        childRoleHierarchy.setParentName(parentRoleHierarchy);
-//    }
+    @Transactional
+    public void createRoleHierarchyIfNotFound(Role childRole, Role parentRole) {
+
+        RoleHierarchy roleHierarchy = roleHierarchyRepository.findByChildName(parentRole.getRoleName());
+        if (roleHierarchy == null) {
+            roleHierarchy = RoleHierarchy.builder()
+                    .childName(parentRole.getRoleName())
+                    .build();
+        }
+        RoleHierarchy parentRoleHierarchy = roleHierarchyRepository.save(roleHierarchy);
+
+        roleHierarchy = roleHierarchyRepository.findByChildName(childRole.getRoleName());
+        if (roleHierarchy == null) {
+            roleHierarchy = RoleHierarchy.builder()
+                    .childName(childRole.getRoleName())
+                    .build();
+        }
+
+        RoleHierarchy childRoleHierarchy = roleHierarchyRepository.save(roleHierarchy);
+        childRoleHierarchy.setParentName(parentRoleHierarchy);
+    }
 
 //    private void setupAccessIpData() {
 //
