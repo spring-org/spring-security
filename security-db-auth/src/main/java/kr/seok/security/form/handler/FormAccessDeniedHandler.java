@@ -20,6 +20,7 @@ public class FormAccessDeniedHandler implements AccessDeniedHandler {
 
         log.debug("예외 : {} ", accessDeniedException.getMessage());
         String deniedUrl = errorPage + "?exception=" + accessDeniedException.getMessage();
+        response.setHeader("Content-Type", "application/json;charset=UTF-8");
         response.sendRedirect(deniedUrl);
     }
 

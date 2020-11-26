@@ -39,7 +39,7 @@ public class ResourcesController {
 	private UrlFilterInvocationSecurityMetadataSource filterInvocationSecurityMetadataSource;
 
 	@GetMapping(value="/admin/resources")
-	public String getResources(Model model) throws Exception {
+	public String getResources(Model model) {
 
 		List<Resources> resources = resourcesService.getResources();
 		model.addAttribute("resources", resources);
@@ -48,7 +48,7 @@ public class ResourcesController {
 	}
 
 	@PostMapping(value="/admin/resources")
-	public String createResources(ResourcesDto resourcesDto) throws Exception {
+	public String createResources(ResourcesDto resourcesDto) {
 
 		ModelMapper modelMapper = new ModelMapper();
 		Role role = roleRepository.findByRoleName(resourcesDto.getRoleName());
@@ -70,7 +70,7 @@ public class ResourcesController {
 	}
 
 	@GetMapping(value="/admin/resources/register")
-	public String viewRoles(Model model) throws Exception {
+	public String viewRoles(Model model) {
 
 		List<Role> roleList = roleService.getRoles();
 		model.addAttribute("roleList", roleList);
@@ -85,11 +85,11 @@ public class ResourcesController {
 	}
 
 	@GetMapping(value="/admin/resources/{id}")
-	public String getResources(@PathVariable String id, Model model) throws Exception {
+	public String getResources(@PathVariable String id, Model model) {
 
 		List<Role> roleList = roleService.getRoles();
         model.addAttribute("roleList", roleList);
-		Resources resources = resourcesService.getResources(Long.valueOf(id));
+		Resources resources = resourcesService.getResources(Long.parseLong(id));
 
 		ModelMapper modelMapper = new ModelMapper();
 		ResourcesDto resourcesDto = modelMapper.map(resources, ResourcesDto.class);
@@ -99,10 +99,10 @@ public class ResourcesController {
 	}
 
 	@GetMapping(value="/admin/resources/delete/{id}")
-	public String removeResources(@PathVariable String id, Model model) throws Exception {
+	public String removeResources(@PathVariable String id) {
 
-		Resources resources = resourcesService.getResources(Long.valueOf(id));
-		resourcesService.deleteResources(Long.valueOf(id));
+		Resources resources = resourcesService.getResources(Long.parseLong(id));
+		resourcesService.deleteResources(Long.parseLong(id));
 
 		if("url".equals(resources.getResourceType())) {
 			filterInvocationSecurityMetadataSource.reload();

@@ -65,16 +65,12 @@ public class PermitAllFilter extends FilterSecurityInterceptor {
             if (fi.getRequest() != null && observeOncePerRequest) {
                 fi.getRequest().setAttribute(FILTER_APPLIED, Boolean.TRUE);
             }
-
             InterceptorStatusToken token = beforeInvocation(fi);
-
             try {
                 fi.getChain().doFilter(fi.getRequest(), fi.getResponse());
-            }
-            finally {
+            } finally {
                 super.finallyInvocation(token);
             }
-
             super.afterInvocation(token, null);
         }
     }

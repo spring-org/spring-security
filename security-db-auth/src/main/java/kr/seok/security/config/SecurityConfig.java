@@ -7,6 +7,7 @@ import kr.seok.security.form.handler.FormAccessDeniedHandler;
 import kr.seok.security.form.provider.FormAuthenticationProvider;
 import kr.seok.security.metadatasource.UrlFilterInvocationSecurityMetadataSource;
 import kr.seok.security.service.SecurityResourceService;
+import kr.seok.security.voter.IpAddressVoter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
@@ -53,7 +54,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private SecurityResourceService securityResourceService;
 
-    private String[] permitAllResources = {"/", "/login", "/user/login/**"};
+    private final String[] permitAllResources = {"/", "/login", "/user/login/**"};
 
     @Bean
     public AuthenticationProvider authenticationProvider() {
@@ -77,7 +78,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 .authorizeRequests()
                 .anyRequest().authenticated();
-
         http
                 .formLogin()
                 .loginPage("/login")
@@ -90,12 +90,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 .exceptionHandling()
                 .accessDeniedHandler(accessDeniedHandler());
-
         /* FilterSecurityInterceptor 사용자 정의 */
         http
                 .addFilterBefore(permitAllFilter(), FilterSecurityInterceptor.class);
-
-        http.csrf().disable();
+        http
+                .csrf().disable();
     }
 
     @Bean
@@ -155,6 +154,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
      */
     private List<AccessDecisionVoter<?>> getAccessDecisionVoters() {
         List<AccessDecisionVoter<? extends Object>> accessDecisionVoters = new ArrayList<>();
+        /* Voter 심의 시 IP를 우선적으로 처리 필요 [순서 중요] */
+        accessDecisionVoters.add(new IpAddressVoter(securityResourceService));
         accessDecisionVoters.add(roleVoter());
         return accessDecisionVoters;
     }
