@@ -4,5 +4,6 @@ include 'security-basic-api'
 include 'security-form-auth'
 include 'security-ajax-auth'
 include 'security-delegate'
-include 'security-db-auth'
+include 'security-db-url-auth'
+include 'security-db-method-auth'
 
