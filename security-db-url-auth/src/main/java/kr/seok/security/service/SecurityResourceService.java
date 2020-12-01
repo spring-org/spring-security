@@ -31,8 +31,9 @@ public class SecurityResourceService {
             List<ConfigAttribute> configAttributes = new ArrayList<>();
             resource.getRoleSet().forEach(role -> {
                 configAttributes.add(new SecurityConfig(role.getRoleName()));
-                result.put(new AntPathRequestMatcher(resource.getResourceName()), configAttributes);
             });
+            /* resource: roles == 1: N 으로 resource 하나당 여러 role을 매핑 처리 */
+            result.put(new AntPathRequestMatcher(resource.getResourceName()), configAttributes);
         });
         return result;
     }
