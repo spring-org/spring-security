@@ -3,24 +3,22 @@ package kr.seok.security.factory;
 import kr.seok.security.service.SecurityResourceService;
 import org.springframework.beans.factory.FactoryBean;
 import org.springframework.security.access.ConfigAttribute;
+import org.springframework.security.web.util.matcher.RequestMatcher;
 
 import java.util.LinkedHashMap;
 import java.util.List;
 
-/**
- *
- */
-public class MethodResourceFactoryBean implements FactoryBean<LinkedHashMap<String, List<ConfigAttribute>>> {
+public class UrlResourcesMapFactoryBean implements FactoryBean<LinkedHashMap<RequestMatcher, List<ConfigAttribute>>> {
 
     private SecurityResourceService securityResourceService;
-    private LinkedHashMap<String, List<ConfigAttribute>> requestMap;
+    private LinkedHashMap<RequestMatcher, List<ConfigAttribute>> requestMap;
 
     public void setSecurityResourceService(SecurityResourceService securityResourceService) {
         this.securityResourceService = securityResourceService;
     }
 
     @Override
-    public LinkedHashMap<String, List<ConfigAttribute>> getObject() {
+    public LinkedHashMap<RequestMatcher, List<ConfigAttribute>> getObject() throws Exception {
         if(requestMap == null) {
             init();
         }
@@ -28,7 +26,7 @@ public class MethodResourceFactoryBean implements FactoryBean<LinkedHashMap<Stri
     }
 
     private void init() {
-        requestMap = securityResourceService.getMethodResourceList();
+        requestMap = securityResourceService.getResourceList();
     }
 
     @Override

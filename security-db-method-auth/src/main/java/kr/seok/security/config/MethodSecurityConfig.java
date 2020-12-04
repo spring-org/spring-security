@@ -32,6 +32,7 @@ public class MethodSecurityConfig extends GlobalMethodSecurityConfiguration {
         return mapBasedMethodSecurityMetadataSource();
     }
 
+    /* 빈으로 등록된 Map 기반 Method MetadataSource */
     @Bean
     public MapBasedMethodSecurityMetadataSource mapBasedMethodSecurityMetadataSource() {
         /* 기본 생성자가 아니라 DB로 부터 가져온 ResourceMap을 전달 */
