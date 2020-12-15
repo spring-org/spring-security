@@ -1,7 +1,7 @@
 package kr.seok.security.config;
 
-import kr.seok.security.form.handler.CustomAccessDeniedHandler;
-import kr.seok.security.form.provider.CustomAuthenticationProvider;
+import kr.seok.security.form.handler.FormAccessDeniedHandler;
+import kr.seok.security.form.provider.FormAuthenticationProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
@@ -28,17 +28,17 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private AuthenticationDetailsSource authenticationDetailsSource;
 
-    @Qualifier("customAuthenticationSuccessHandler")
+    @Qualifier("formAuthenticationSuccessHandler")
     @Autowired
-    private AuthenticationSuccessHandler authenticationSuccessHandler;
+    private AuthenticationSuccessHandler formAuthenticationSuccessHandler;
 
-    @Qualifier("customAuthenticationFailureHandler")
+    @Qualifier("formAuthenticationFailureHandler")
     @Autowired
-    private AuthenticationFailureHandler authenticationFailureHandler;
+    private AuthenticationFailureHandler formAuthenticationFailureHandler;
 
     @Bean
     public AuthenticationProvider authenticationProvider() {
-        return new CustomAuthenticationProvider();
+        return new FormAuthenticationProvider();
     }
 
     @Bean
@@ -73,8 +73,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 /* request의 상세 값을 Details로 추가 하기 위한 작업 */
                 .authenticationDetailsSource(authenticationDetailsSource)
                 /* 사용자 정의 Success Handler */
-                .successHandler(authenticationSuccessHandler)
-                .failureHandler(authenticationFailureHandler)
+                .successHandler(formAuthenticationSuccessHandler)
+                .failureHandler(formAuthenticationFailureHandler)
                 .permitAll()
         ;
         http
@@ -85,7 +85,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Bean
     public AccessDeniedHandler accessDeniedHandler() {
 
-        CustomAccessDeniedHandler customAccessDeniedHandler = new CustomAccessDeniedHandler();
+        FormAccessDeniedHandler customAccessDeniedHandler = new FormAccessDeniedHandler();
         customAccessDeniedHandler.setErrorPage("/denied");
 
         return customAccessDeniedHandler;
