@@ -12,7 +12,7 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-public class CustomAuthenticationProvider implements AuthenticationProvider {
+public class FormAuthenticationProvider implements AuthenticationProvider {
 
     @Autowired
     private UserDetailsService userDetailsService;

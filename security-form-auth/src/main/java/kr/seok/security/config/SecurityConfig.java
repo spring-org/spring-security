@@ -1,8 +1,7 @@
 package kr.seok.security.config;
 
-import kr.seok.security.handler.CustomAccessDeniedHandler;
-import kr.seok.security.provider.CustomAuthenticationProvider;
-import org.springframework.beans.factory.annotation.Autowired;
+import kr.seok.security.handler.FormAccessDeniedHandler;
+import kr.seok.security.provider.FormAuthenticationProvider;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -24,18 +23,21 @@ import org.springframework.security.web.authentication.AuthenticationSuccessHand
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     /* 인증 처리 중 추가 요청 파라미터를 저장하는 클래스 */
-    @Autowired
-    private AuthenticationDetailsSource authenticationDetailsSource;
+    private final AuthenticationDetailsSource authenticationDetailsSource;
 
-    @Autowired
-    private AuthenticationSuccessHandler authenticationSuccessHandler;
+    private final AuthenticationSuccessHandler authenticationSuccessHandler;
 
-    @Autowired
-    private AuthenticationFailureHandler authenticationFailureHandler;
+    private final AuthenticationFailureHandler authenticationFailureHandler;
+
+    public SecurityConfig(AuthenticationDetailsSource authenticationDetailsSource, AuthenticationSuccessHandler authenticationSuccessHandler, AuthenticationFailureHandler authenticationFailureHandler) {
+        this.authenticationDetailsSource = authenticationDetailsSource;
+        this.authenticationSuccessHandler = authenticationSuccessHandler;
+        this.authenticationFailureHandler = authenticationFailureHandler;
+    }
 
     @Bean
     public AuthenticationProvider authenticationProvider() {
-        return new CustomAuthenticationProvider();
+        return new FormAuthenticationProvider();
     }
 
     @Bean
@@ -81,10 +83,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Bean
     public AccessDeniedHandler accessDeniedHandler() {
 
-        CustomAccessDeniedHandler customAccessDeniedHandler = new CustomAccessDeniedHandler();
-        customAccessDeniedHandler.setErrorPage("/denied");
+        FormAccessDeniedHandler formAccessDeniedHandler = new FormAccessDeniedHandler();
+        formAccessDeniedHandler.setErrorPage("/denied");
 
-        return customAccessDeniedHandler;
+        return formAccessDeniedHandler;
     }
 
     @Override

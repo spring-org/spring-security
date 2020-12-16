@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class CustomUserDetailsService implements UserDetailsService {
+public class FormUserDetailsService implements UserDetailsService {
 
     @Autowired
     private UserRepository userRepository;

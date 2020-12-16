@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @Component
-public class CustomAuthenticationFailureHandler extends SimpleUrlAuthenticationFailureHandler {
+public class FormAuthenticationFailureHandler extends SimpleUrlAuthenticationFailureHandler {
     /* 인증 실패 처리 Handler */
 
     @Override
