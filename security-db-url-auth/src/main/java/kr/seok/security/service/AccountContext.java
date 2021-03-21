@@ -10,7 +10,7 @@ import java.util.List;
 public class AccountContext extends User {
 
     @Getter
-    private Account account;
+    private final Account account;
 
     public AccountContext(Account account, List<GrantedAuthority> roles) {
         super(account.getUsername(), account.getPassword(), roles);

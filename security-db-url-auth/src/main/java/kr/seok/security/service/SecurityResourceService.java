@@ -1,5 +1,6 @@
 package kr.seok.security.service;
 
+import kr.seok.domain.entity.AccessIp;
 import kr.seok.domain.entity.Resources;
 import kr.seok.domain.repository.AccessIpRepository;
 import kr.seok.domain.repository.ResourcesRepository;
@@ -15,8 +16,8 @@ import java.util.stream.Collectors;
 
 public class SecurityResourceService {
 
-    private ResourcesRepository resourcesRepository;
-    private AccessIpRepository accessIpRepository;
+    private final ResourcesRepository resourcesRepository;
+    private final AccessIpRepository accessIpRepository;
 
     public SecurityResourceService(ResourcesRepository resourceRepository, AccessIpRepository accessIpRepository) {
         this.resourcesRepository = resourceRepository;
@@ -41,7 +42,7 @@ public class SecurityResourceService {
     public List<String> getAccessIpList() {
         return accessIpRepository.findAll()
                 .stream()
-                .map(accessIp -> accessIp.getIpAddress())
+                .map(AccessIp::getIpAddress)
                 .collect(Collectors.toList());
     }
 }
