@@ -6,4 +6,5 @@ include 'security-ajax-auth'
 include 'security-delegate'
 include 'security-db-url-auth'
 include 'security-db-method-auth'
+include 'security-flow-basic'
 
