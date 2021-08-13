@@ -1,4 +1,4 @@
-package com.example.securitybasicflow.security.api;
+package com.example.securitybasicflow.application.api;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

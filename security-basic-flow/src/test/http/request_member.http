@@ -1,0 +1,28 @@
+### POST Member
+POST http://localhost:8083/members
+Content-Type: application/json
+
+{
+  "email" : "seok@gmail.com",
+  "username" : "seokrae",
+  "password" : "1234"
+}
+
+### PUT Member
+PUT http://localhost:8083/members/2
+Content-Type: application/json
+
+{
+  "email" : "seok@gmail.com",
+  "username" : "seok"
+}
+
+
+### Login
+POST http://localhost:8083/auth/login
+Content-Type: application/json
+
+{
+  "email" : "seok@gmail.com",
+  "password" : "1234"
+}
