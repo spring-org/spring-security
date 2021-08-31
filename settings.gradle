@@ -7,4 +7,6 @@ include 'security-delegate'
 include 'security-db-url-auth'
 include 'security-db-method-auth'
 include 'security-flow-basic'
+include 'security-basic-flow'
+include 'security-basic-flow2'
 
