@@ -1,4 +1,4 @@
-package com.example.securitybasicflow2.core.exception;
+package com.example.securitybasicflow2.application.exception;
 
 import lombok.Getter;
 

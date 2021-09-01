@@ -15,10 +15,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 @SpringBootTest
 class SecurityBasicFlow2ApplicationTests {
 
-    @Test
-    void contextLoads() {
-    }
-
     @DisplayName("기본 스프링 시큐리티 필터 체인 확인하기")
     @Test
     void testCase1() {

@@ -40,14 +40,14 @@ class MemberApiTest {
                 .thenReturn(createMemberEntity());
 
         mockMvc.perform(post("/members")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(createSaveMember()))
-        )
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(createSaveMember()))
+                )
                 .andDo(print())
                 .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.email").exists())
-                .andExpect(jsonPath("$.password").exists())
-                .andExpect(jsonPath("$.name").exists());
+                .andExpect(jsonPath("$.member.email").exists())
+                .andExpect(jsonPath("$.member.password").exists())
+                .andExpect(jsonPath("$.member.name").exists());
     }
 
     private RequestSaveMember createSaveMember() {

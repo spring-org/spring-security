@@ -1,7 +1,5 @@
-package com.example.securitybasicflow2.core.exception;
+package com.example.securitybasicflow2.application.exception;
 
-import com.example.securitybasicflow2.application.exception.DuplicateMemberEmailException;
-import com.example.securitybasicflow2.application.exception.MemberNotFoundException;
 import com.example.securitybasicflow2.core.response.ResponseErrorData;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
