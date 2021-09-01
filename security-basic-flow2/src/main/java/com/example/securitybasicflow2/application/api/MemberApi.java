@@ -3,6 +3,7 @@ package com.example.securitybasicflow2.application.api;
 import com.example.securitybasicflow2.application.domain.MemberEntity;
 import com.example.securitybasicflow2.application.dto.RequestSaveMember;
 import com.example.securitybasicflow2.application.dto.RequestUpdateMember;
+import com.example.securitybasicflow2.application.dto.ResponseMember;
 import com.example.securitybasicflow2.application.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(value = "/members")
@@ -20,28 +22,30 @@ public class MemberApi {
     private final MemberService memberService;
 
     @GetMapping
-    public ResponseEntity<?> getMembers() {
+    public ResponseEntity<List<ResponseMember>> getMembers() {
 
-        List<MemberEntity> members = memberService.getMembers();
+        List<ResponseMember> members = memberService.getMembers().stream()
+                .map(ResponseMember::toResponse)
+                .collect(Collectors.toList());
 
         return ResponseEntity.status(HttpStatus.OK).body(members);
     }
 
     @PostMapping
-    public ResponseEntity<?> addMember(@Valid @RequestBody RequestSaveMember saveMember) {
+    public ResponseEntity<ResponseMember> addMember(@Valid @RequestBody RequestSaveMember saveMember) {
 
         MemberEntity savedMember = memberService.saveMember(saveMember);
 
-        return ResponseEntity.status(HttpStatus.OK).body(savedMember);
+        return ResponseEntity.status(HttpStatus.CREATED).body(ResponseMember.toResponse(savedMember));
     }
 
     @PutMapping(value = "/{memberId}")
-    public ResponseEntity<?> updateMember(
+    public ResponseEntity<ResponseMember> updateMember(
             @PathVariable("memberId") Long memberId, @Valid @RequestBody RequestUpdateMember updateMember) {
 
         MemberEntity updatedMember = memberService.updateMember(memberId, updateMember);
 
-        return ResponseEntity.status(HttpStatus.OK).body(updatedMember);
+        return ResponseEntity.status(HttpStatus.OK).body(ResponseMember.toResponse(updatedMember));
     }
 
     @DeleteMapping(value = "/{memberId}")

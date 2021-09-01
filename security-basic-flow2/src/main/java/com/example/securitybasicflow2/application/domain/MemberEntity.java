@@ -39,11 +39,11 @@ public class MemberEntity {
 
     public MemberEntity update(RequestUpdateMember updateMember) {
 
-        if(updateMember.isName())
+        if (updateMember.isName())
             this.name = updateMember.getName();
-        if(updateMember.isPassword())
+        if (updateMember.isPassword())
             this.password = updateMember.getPassword();
-        if(updateMember.isRole())
+        if (updateMember.isRole())
             this.role = updateMember.getRole();
 
         return this;

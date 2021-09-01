@@ -10,17 +10,18 @@ class MemberEntityTest {
     @DisplayName("엔티티 생성 테스트")
     @Test
     void testCase1() {
-        MemberEntity actual = MemberEntity.builder()
-                .name("seok")
-                .email("seok@gmail.com")
-                .password("1234")
-                .build();
+        MemberEntity actual = createMember();
 
-        MemberEntity expected = MemberEntity.builder()
+        MemberEntity expected = createMember();
+
+        assertThat(actual).isEqualTo(expected);
+    }
+
+    private MemberEntity createMember() {
+        return MemberEntity.builder()
                 .name("seok")
                 .email("seok@gmail.com")
                 .password("1234")
                 .build();
-        assertThat(actual).isEqualTo(expected);
     }
 }

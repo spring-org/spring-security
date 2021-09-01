@@ -1,8 +1,10 @@
 package com.example.securitybasicflow2.application.exception;
 
-public class DuplicateMemberEmailException extends RuntimeException {
+import com.example.securitybasicflow2.core.exception.BusinessException;
 
-    public DuplicateMemberEmailException(String message) {
-        super(message);
+public class DuplicateMemberEmailException extends BusinessException {
+
+    public DuplicateMemberEmailException(int code, String errMessage) {
+        super(code, errMessage);
     }
 }

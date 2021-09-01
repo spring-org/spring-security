@@ -5,11 +5,14 @@ import lombok.Builder;
 import lombok.Data;
 import org.apache.logging.log4j.util.Strings;
 
+import javax.validation.constraints.NotEmpty;
 import java.util.Objects;
 
 @Data
 public class RequestUpdateMember {
+    @NotEmpty(message = "email mat not be empty")
     private String name;
+    @NotEmpty(message = "email mat not be empty")
     private String password;
     private MemberEntity.Role role;
 
