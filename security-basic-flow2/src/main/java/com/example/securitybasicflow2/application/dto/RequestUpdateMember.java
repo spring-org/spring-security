@@ -10,10 +10,15 @@ import java.util.Objects;
 
 @Data
 public class RequestUpdateMember {
-    @NotEmpty(message = "email mat not be empty")
-    private String name;
-    @NotEmpty(message = "email mat not be empty")
+
+    @NotEmpty(message = "email not be empty")
+    private String email;
+
+    @NotEmpty(message = "password not be empty")
     private String password;
+
+    private String name;
+
     private MemberEntity.Role role;
 
     public boolean isName() {
@@ -29,9 +34,10 @@ public class RequestUpdateMember {
     }
 
     @Builder
-    public RequestUpdateMember(String name, String password, MemberEntity.Role role) {
-        this.name = name;
+    public RequestUpdateMember(String email, String password, String name, MemberEntity.Role role) {
+        this.email = email;
         this.password = password;
+        this.name = name;
         this.role = role;
     }
 }

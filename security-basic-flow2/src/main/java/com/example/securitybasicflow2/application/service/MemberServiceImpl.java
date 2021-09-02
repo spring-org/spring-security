@@ -19,6 +19,18 @@ public class MemberServiceImpl implements MemberService {
 
     private final MemberRepository memberRepository;
 
+    @Override
+    public List<MemberEntity> getMembers() {
+        return memberRepository.findAll();
+    }
+
+    @Override
+    public MemberEntity findMember(Long memberId) {
+        return memberRepository.findById(memberId)
+                .orElseThrow(() -> new MemberNotFoundException(404, "사용자가 존재하지 않습니다."));
+    }
+
+    @Override
     public MemberEntity saveMember(RequestSaveMember saveMember) {
         if (memberRepository.existsByEmail(saveMember.getEmail())) {
             throw new DuplicateMemberEmailException(404, "동일한 이메일 정보가 존재합니다.");
@@ -27,22 +39,18 @@ public class MemberServiceImpl implements MemberService {
         return memberRepository.save(saveMember.toEntity());
     }
 
-    public List<MemberEntity> getMembers() {
-        return memberRepository.findAll();
-    }
-
+    @Override
     public MemberEntity updateMember(Long memberId, RequestUpdateMember updateMember) {
-        MemberEntity findMember = memberRepository.findById(memberId)
-                .orElseThrow(() -> new MemberNotFoundException(404, "사용자가 존재하지 않습니다."));
+        MemberEntity findMember = findMember(memberId);
 
         return findMember.update(updateMember);
     }
 
+    @Override
     public boolean deleteMember(Long id) {
-        memberRepository.findById(id)
-                .orElseThrow(() -> new MemberNotFoundException(404, "사용자가 존재하지 않습니다."));
+        MemberEntity member = findMember(id);
 
-        memberRepository.deleteById(id);
+        memberRepository.delete(member);
 
         return memberRepository.existsById(id);
     }

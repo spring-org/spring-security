@@ -24,6 +24,7 @@ public class ResponseData<T> {
     public static <T> ResponseData<T> OK() {
         return ResponseData.<T>builder()
                 .desc(ResponseCode.OK.getDesc())
+                .responseCode(ResponseCode.OK)
                 .processTime(LocalDateTime.now())
                 .build();
     }
@@ -31,6 +32,8 @@ public class ResponseData<T> {
     public static <T> ResponseData<T> OK(T data) {
         return ResponseData.<T>builder()
                 .processTime(LocalDateTime.now())
+                .responseCode(ResponseCode.OK)
+                .desc(ResponseCode.OK.getDesc())
                 .data(data)
                 .build();
     }
@@ -38,6 +41,8 @@ public class ResponseData<T> {
     public static <T> ResponseData<T> ERROR(String desc) {
         return ResponseData.<T>builder()
                 .processTime(LocalDateTime.now())
+                .responseCode(ResponseCode.ERROR)
+                .desc(ResponseCode.ERROR.getDesc())
                 .desc(desc)
                 .build();
     }

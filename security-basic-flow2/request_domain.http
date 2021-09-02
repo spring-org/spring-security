@@ -1,0 +1,36 @@
+### API C
+POST http://localhost:8085/members
+Content-Type: application/json
+
+{
+  "email" : "seok@gmail.com",
+  "name" : "seokrae",
+  "password" : "1234"
+}
+
+### API C
+POST http://localhost:8085/members
+Content-Type: application/json
+
+{
+  "email" : "seokrae@gmail.com",
+  "name" : "seokrae",
+  "password" : "1234"
+}
+
+### API R
+GET http://localhost:8085/members/1
+
+### API R
+GET http://localhost:8085/members
+
+### API U
+PUT http://localhost:8085/members/2
+Content-Type: application/json
+
+{
+  "email" : "seokrae@gmail.com",
+  "name" : "seokrae",
+  "password" : "1234",
+  "role" : "ROLE_USER"
+}

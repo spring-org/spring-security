@@ -4,6 +4,7 @@ import com.example.securitybasicflow2.application.domain.MemberEntity;
 import com.example.securitybasicflow2.application.dto.RequestSaveMember;
 import com.example.securitybasicflow2.application.dto.RequestUpdateMember;
 import com.example.securitybasicflow2.application.dto.ResponseMember;
+import com.example.securitybasicflow2.application.dto.ResponseMembers;
 import com.example.securitybasicflow2.application.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -12,7 +13,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(value = "/members")
@@ -22,13 +22,18 @@ public class MemberApi {
     private final MemberService memberService;
 
     @GetMapping
-    public ResponseEntity<List<ResponseMember>> getMembers() {
+    public ResponseEntity<ResponseMembers> getMembers() {
 
-        List<ResponseMember> members = memberService.getMembers().stream()
-                .map(ResponseMember::toResponse)
-                .collect(Collectors.toList());
+        List<MemberEntity> members = memberService.getMembers();
+        ResponseMembers responseMembers = ResponseMembers.of(members);
 
-        return ResponseEntity.status(HttpStatus.OK).body(members);
+        return ResponseEntity.status(HttpStatus.OK).body(responseMembers);
+    }
+
+    @GetMapping(value = "/{memberId}")
+    public ResponseEntity<ResponseMember> getMember(@PathVariable("memberId") Long memberId) {
+        MemberEntity findMember = memberService.findMember(memberId);
+        return ResponseEntity.status(HttpStatus.OK).body(ResponseMember.toResponse(findMember));
     }
 
     @PostMapping
